@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delicious Bites - Order Food Online</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background-color: #FFF8F0;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        header {
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: bold;
+            color: #d97706;
+            text-decoration: none;
+        }
+        .nav-links a {
+            margin: 0 1rem;
+            text-decoration: none;
+            color: #555;
+            transition: color 0.3s;
+        }
+        .nav-links a:hover {
+            color: #d97706;
+        }
+        .nav-buttons .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            border: 1px solid #d97706;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background-color: #d97706;
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #b45309;
+        }
+        .btn-secondary {
+            background-color: transparent;
+            color: #d97706;
+        }
+        .btn-secondary:hover {
+            background-color: #d97706;
+            color: white;
+        }
+        #mobileMenuBtn { display: none; }
+
+        .hero {
+            height: 80vh;
+            background-image: url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=2070&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            color: white;
+        }
+        .hero-content h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            margin: 0;
+            line-height: 1.2;
+        }
+        .hero-content h1 span {
+            color: #fb923c;
+        }
+        .hero-content p {
+            margin-top: 1rem;
+            max-width: 500px;
+            font-size: 1.1rem;
+        }
+        .hero-content .btn {
+            margin-top: 2rem;
+            padding: 0.8rem 1.8rem;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            background-color: #d97706;
+            color: white;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+         .hero-content .btn:hover {
+            background-color: #b45309;
+        }
+
+        .section {
+            padding: 4rem 0;
+        }
+        .section-title {
+            text-align: center;
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .section-subtitle {
+            text-align: center;
+            color: #777;
+            margin-bottom: 3rem;
+        }
+
+        #menu-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+        .menu-card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .menu-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+        .menu-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        .menu-card-content {
+            padding: 1.5rem;
+        }
+        .menu-card-content h3 {
+            margin: 0 0 0.5rem 0;
+            font-size: 1.4rem;
+        }
+        .menu-card-content p {
+            color: #666;
+            font-size: 0.9rem;
+            margin: 0 0 1rem 0;
+        }
+        .menu-card-price {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #d97706;
+        }
+
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+        }
+        footer .logo {
+            color: #fb923c;
+        }
+        footer p {
+            margin: 0.5rem 0;
+        }
+        footer a {
+            color: white;
+            text-decoration: underline;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.6);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 2rem;
+            border: 1px solid #888;
+            width: 90%;
+            max-width: 400px;
+            border-radius: 12px;
+            position: relative;
+        }
+        .close-btn {
+            color: #aaa;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .modal-content h2 { text-align: center; }
+        .modal-content form div { margin-bottom: 1rem; }
+        .modal-content label { display: block; margin-bottom: 0.5rem; font-weight: 500;}
+        .modal-content input {
+            width: 100%;
+            padding: 0.7rem;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
+        .modal-content button {
+            width: 100%;
+            padding: 0.8rem;
+            font-size: 1rem;
+        }
+
+        #mobileMenu { display: none; }
+
+        @media (max-width: 768px) {
+            .nav-links, .nav-buttons .btn {
+                display: none;
+            }
+            #mobileMenuBtn {
+                display: block;
+                background: none;
+                border: none;
+                cursor: pointer;
+            }
+            #mobileMenu {
+                background-color: white;
+                text-align: center;
+                padding-bottom: 1rem;
+            }
+            #mobileMenu a {
+                display: block;
+                padding: 1rem;
+                text-decoration: none;
+                color: #555;
+            }
+            #mobileMenu div {
+                margin-top: 1rem;
+            }
+             #mobileMenu .btn {
+                margin: 0 0.5rem;
+             }
+            .hero-content h1 { font-size: 2.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <a href="#" class="logo">Delicious Bites</a>
+                <div class="nav-links">
+                    <a href="#menu">Menu</a>
+                    <a href="#about">About Us</a>
+                    <a href="#contact">Contact</a>
+                </div>
+                <div class="nav-buttons">
+                    <button id="signInBtnNav" class="btn btn-secondary">Sign In</button>
+                    <button id="signUpBtnNav" class="btn btn-primary">Sign Up</button>
+                </div>
+                <button id="mobileMenuBtn">
+                     <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </nav>
+        </div>
+        <div id="mobileMenu">
+            <a href="#menu">Menu</a>
+            <a href="#about">About Us</a>
+            <a href="#contact">Contact</a>
+            <div>
+                <button id="signInBtnMobile" class="btn btn-secondary">Sign In</button>
+                <button id="signUpBtnMobile" class="btn btn-primary">Sign Up</button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-overlay"></div>
+            <div class="container">
+                <div class="hero-content">
+                    <h1>Your Next Favorite Meal, <br><span>Delivered Fast.</span></h1>
+                    <p>From our kitchen to your table. Explore a world of authentic Indian flavors, crafted with passion and the freshest ingredients.</p>
+                    <a href="#menu" class="btn">Order Now</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="menu" class="section">
+            <div class="container">
+                <h2 class="section-title">Our Menu</h2>
+                <p class="section-subtitle">Deliciousness is just a click away.</p>
+                <div id="menu-container"></div>
+            </div>
+        </section>
+
+        <section id="about" class="section" style="background-color: white;">
+            <div class="container" style="display: flex; align-items: center; gap: 3rem; flex-wrap: wrap;">
+                <div style="flex: 1; min-width: 300px;">
+                    <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=1974&auto=format&fit=crop" alt="Chef cooking" style="width: 100%; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.15);">
+                </div>
+                <div style="flex: 1; min-width: 300px;">
+                    <h2 class="section-title" style="text-align: left;">Crafted with Love</h2>
+                    <p style="color: #666; line-height: 1.7;">At Delicious Bites, we believe food is more than just sustenance; it's an experience. Our journey began with a simple passion for creating unforgettable dishes that bring people together. Every meal is prepared by our expert chefs using locally-sourced ingredients to ensure peak freshness and flavor.</p>
+                    <p style="color: #666; line-height: 1.7;">We're committed to quality, community, and the simple joy of a good meal. Thank you for being a part of our story.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer id="contact">
+        <div class="container">
+            <a href="#" class="logo">Delicious Bites</a>
+            <p>Rupnagar, LTSU, Punjab</p>
+            <p>For reservations or inquiries, call us at <a href="tel:123-456-7890">123-456-7890</a></p>
+            <p>&copy; 2024 Delicious Bites. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <div id="signInModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Sign In</h2>
+            <form>
+                <div>
+                    <label for="signInEmail">Email Address</label>
+                    <input type="email" id="signInEmail" placeholder="you@example.com">
+                </div>
+                <div>
+                    <label for="signInPassword">Password</label>
+                    <input type="password" id="signInPassword" placeholder="******************">
+                </div>
+                <button type="button" class="btn btn-primary">Sign In</button>
+            </form>
+        </div>
+    </div>
+    
+    <div id="signUpModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Create Account</h2>
+            <form>
+                <div>
+                    <label for="signUpName">Full Name</label>
+                    <input type="text" id="signUpName" placeholder="John Doe">
+                </div>
+                <div>
+                    <label for="signUpEmail">Email Address</label>
+                    <input type="email" id="signUpEmail" placeholder="you@example.com">
+                </div>
+                <div>
+                    <label for="signUpPassword">Password</label>
+                    <input type="password" id="signUpPassword" placeholder="******************">
+                </div>
+                <button type="button" class="btn btn-primary">Sign Up</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            const menuItems = [
+                { name: 'Butter Chicken', description: 'Tender chicken in a creamy tomato sauce, a true classic.', price: '450', image: 'https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?q=80&w=1974&auto=format&fit=crop' },
+                { name: 'Paneer Tikka', description: 'Marinated cottage cheese cubes grilled to perfection in a tandoor.', price: '380', image: 'https://images.unsplash.com/photo-1666001120694-3ebe8fd207be?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop' },
+                { name: 'Chole Bhature', description: 'Spicy chickpea curry served with fluffy deep-fried bread.', price: '250', image: 'https://madhurasrecipe.com/wp-content/uploads/2020/10/Chole-Bhature-Marathi-Recipe-585x366.jpg' },
+                { name: 'Masala Dosa', description: 'Crispy rice crepe filled with a savory spiced potato mash.', price: '220', image: 'https://images.unsplash.com/photo-1668236543090-82eba5ee5976?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop' },
+                { name: 'Chicken Biryani', description: 'Aromatic basmati rice with spices and tender chicken.', price: '480', image: 'https://images.unsplash.com/photo-1589302168068-964664d93dc0?q=80&w=1974&auto=format&fit=crop' },
+                { name: 'Palak Paneer', description: 'Creamy spinach curry with soft paneer cubes.', price: '390', image: 'https://images.unsplash.com/photo-1589647363585-f4a7d3877b10?q=80&w=1172&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop' },
+                { name: 'Dal Makhani', description: 'Rich and creamy black lentils slow-cooked to perfection.', price: '350', image: 'https://www.greedygourmet.com/wp-content/uploads/2013/02/dal-makhani-feature-225x225.jpg' },
+                { name: 'Aloo Gobi', description: 'A classic vegetarian dish with potatoes and cauliflower.', price: '280', image: 'https://www.cookingandme.com/wp-content/uploads/2014/07/14523274883_3b6177e82b_z-427x375.jpg' },
+                { name: 'Samosa Chaat', description: 'Crushed samosas topped with yogurt, chutney, and spices.', price: '150', image: 'https://www.whiskaffair.com/wp-content/uploads/2021/04/Samosa-Chaat-2-3-500x375.jpg' },
+                { name: 'Gulab Jamun', description: 'Soft, spongy balls soaked in a sweet rose-flavored syrup.', price: '120', image: 'https://foodsandflavorsbyshilpi.com/wp-content/uploads/2016/04/FB-Thumnails-website-old-2021-05-02T192414.748-500x500.jpg' },
+                { name: 'Jalebi', description: 'Crispy, sweet spirals of fried batter soaked in syrup.', price: '140', image: 'https://www.secondrecipe.com/wp-content/uploads/2019/12/jalebi-500x500.jpg' },
+                { name: 'Mango Lassi', description: 'A refreshing and creamy yogurt-based drink with mango.', price: '180', image: 'https://assets.tmecosys.com/image/upload/t_web_rdp_recipe_584x480/img/recipe/ras/Assets/6a808bb0-210d-4a71-9bd5-5f602437232f/Derivates/37e049d3-4aec-44fb-a1e4-17c951aa4623.jpg' }
+            ];
+
+            const menuContainer = document.getElementById('menu-container');
+            menuContainer.innerHTML = ''; // Clear existing menu before adding new items
+            menuItems.forEach(function(item) {
+                const card = document.createElement('div');
+                card.className = 'menu-card';
+                card.innerHTML = `
+                    <img src="${item.image}" alt="${item.name}">
+                    <div class="menu-card-content">
+                        <h3>${item.name}</h3>
+                        <p>${item.description}</p>
+                        <div class="menu-card-price">₹${item.price}</div>
+                    </div>
+                `;
+                menuContainer.appendChild(card);
+            });
+
+            const signInModal = document.getElementById('signInModal');
+            const signUpModal = document.getElementById('signUpModal');
+            
+            function openModal(modal) {
+                modal.style.display = 'block';
+            }
+            function closeModal(modal) {
+                modal.style.display = 'none';
+            }
+
+            document.getElementById('signInBtnNav').addEventListener('click', function() { openModal(signInModal); });
+            document.getElementById('signInBtnMobile').addEventListener('click', function() { openModal(signInModal); });
+            document.getElementById('signUpBtnNav').addEventListener('click', function() { openModal(signUpModal); });
+            document.getElementById('signUpBtnMobile').addEventListener('click', function() { openModal(signUpModal); });
+
+            const closeButtons = document.querySelectorAll('.close-btn');
+            closeButtons.forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    closeModal(signInModal);
+                    closeModal(signUpModal);
+                });
+            });
+
+            window.addEventListener('click', function(event) {
+                if (event.target == signInModal) {
+                    closeModal(signInModal);
+                }
+                if (event.target == signUpModal) {
+                    closeModal(signUpModal);
+                }
+            });
+
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenuBtn.addEventListener('click', function() {
+                if (mobileMenu.style.display === 'block') {
+                    mobileMenu.style.display = 'none';
+                } else {
+                    mobileMenu.style.display = 'block';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
